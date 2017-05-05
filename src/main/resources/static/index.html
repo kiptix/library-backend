@@ -8,7 +8,7 @@
 <body>
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
 
-  <div id="app-4">
+  <div id="lib">
     <table>
       <tr v-for="book in books">
         <td>{{ book.title }}</td>
@@ -20,9 +20,9 @@
   <script>
     var apiURL = 'http://localhost:8080/books'
 
-    var app4 = new Vue({
+    var lib = new Vue({
 
-      el: '#app-4',
+      el: '#lib',
       data: {
         books: null
       },
@@ -31,14 +31,14 @@
         this.fetchData()
       },
 
-
       methods: {
         fetchData: function () {
           var xhr = new XMLHttpRequest()
           var self = this
           xhr.open('GET', apiURL)
           xhr.onload = function () {
-            self.books = JSON.parse(xhr.responseText)
+            var o = JSON.parse(xhr.responseText)
+            self.books = o._embedded.books
             console.log(self.books)
           }
           xhr.send()
