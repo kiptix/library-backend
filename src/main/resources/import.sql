@@ -65,4 +65,4 @@ insert into book(author, title, isbn, publisher, publication) VALUES ('Mansilla,
 insert into book(author, title, isbn, publisher, publication) VALUES ('Robbins, Arnold / Beebe, Nelson H. F.', 'Classic Shell Scripting', '978-0596005955', 'O''Reilly Media', '2005-05-01');
 insert into book(author, title, isbn, publisher, publication) VALUES ('Michal Bali', 'Drools JBoss Rules 5.0', '978-1847195647', 'Packt Publishing', '2009-07-01');
 insert into book(author, title, isbn, publisher, publication) VALUES ('Paul Browne', 'JBoss Drools Business Rules', '978-1847196064', 'Packt Publishing', '2009-04-01');
-insert into book(author, title, isbn, publisher, publication) VALUES ('Joshua Bloch', 'Effective Java (Second Edition)', '978-0321356680', 'Addison-Wesley', '2008-05-01');
+insert into book(author, title, isbn, publisher, publication,user) VALUES ('Joshua Bloch', 'Effective Java (Second Edition)', '978-0321356680', 'Addison-Wesley', '2008-05-01','Stefan Meyer');

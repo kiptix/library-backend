@@ -13,5 +13,6 @@ data class Book(
         val title: String,
         val publisher: String,
         val isbn: String,
-        val publication: String
+        val publication: String,
+        var user: String?
 )
