@@ -38,7 +38,7 @@
           <td>{{ book.isbn }}</td>
           <td>{{ book.publication }}</td>
           <td>{{ book.user }}</td>
-          <td><button @click="lend(book)">Ausleihen</button></td>
+          <td><button class="btn btn-info" v-bind:class="{ disabled: book.user }" @click="lend(book)">Ausleihen</button></td>
         </tr>
       </tbody>
     </table>
