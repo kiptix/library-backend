@@ -19,11 +19,23 @@
       <thead>
         <tr>
           <th>Titel</th>
-          <th>Author</th>
+          <th>Autor</th>
+          <th>Verlag</th>
+          <th>ISBN</th>
+          <th>Erscheinungsdatum</th>
+          <th>Verliehen</th>
         </tr>
       </thead>
       <tbody>
-        <bookrow v-for="item in books" v-bind:book="item"></bookrow>
+        <!--<bookrow v-for="item in books" v-bind:book="item"></bookrow>-->
+        <tr v-for="book in books">
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.publisher }}</td>
+          <td>{{ book.isbn }}</td>
+          <td>{{ book.publication }}</td>
+          <td></td>
+        </tr>
       </tbody>
     </table>
   </div>
