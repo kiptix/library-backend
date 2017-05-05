@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+  <div id="app-4">
+    <table>
+      <tr v-for="book in books">
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    var apiURL = 'http://localhost:8080/books'
+
+    var app4 = new Vue({
+
+      el: '#app-4',
+      data: {
+        books: null
+      },
+
+      created: function () {
+        this.fetchData()
+      },
+
+
+      methods: {
+        fetchData: function () {
+          var xhr = new XMLHttpRequest()
+          var self = this
+          xhr.open('GET', apiURL)
+          xhr.onload = function () {
+            self.books = JSON.parse(xhr.responseText)
+            console.log(self.books)
+          }
+          xhr.send()
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>
