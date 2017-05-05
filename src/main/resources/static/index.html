@@ -118,15 +118,10 @@
             },
 
             fetchData: function () {
-                var xhr = new XMLHttpRequest()
                 var self = this
-                xhr.open('GET', apiURL)
-                xhr.onload = function () {
-                    var o = JSON.parse(xhr.responseText)
-                    self.books = o._embedded.books
-                    console.log(self.books)
-                }
-                xhr.send()
+                $.getJSON(apiURL, function(result){
+                    self.books = result._embedded.books
+                });
             }
         }
     })
