@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <book v-for="item in books" v-bind:book="item"></book>
+        <bookrow v-for="item in books" v-bind:book="item"></bookrow>
       </tbody>
     </table>
   </div>
@@ -31,7 +31,7 @@
   <script>
     var apiURL = 'http://localhost:8080/books'
 
-    Vue.component('book', {
+    Vue.component('bookrow', {
       props: ['book'],
       template: '<tr><td>{{ book.title }}</td><td>{{ book.author }}</td></tr>'
     })
