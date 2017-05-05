@@ -18,7 +18,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Titel</th>
+          <th>Nr.</th>
           <th>Autor</th>
           <th>Verlag</th>
           <th>ISBN</th>
@@ -28,7 +28,8 @@
       </thead>
       <tbody>
         <!--<bookrow v-for="item in books" v-bind:book="item"></bookrow>-->
-        <tr v-for="book in books">
+        <tr v-for="(book, index) in books">
+          <td>{{ index + 1 }}</td>
           <td>{{ book.title }}</td>
           <td>{{ book.author }}</td>
           <td>{{ book.publisher }}</td>
