@@ -25,6 +25,7 @@
           <th>ISBN</th>
           <th>Erscheinungsdatum</th>
           <th>Verliehen</th>
+          <th>Ausleihen</th>
         </tr>
       </thead>
       <tbody>
@@ -37,6 +38,7 @@
           <td>{{ book.isbn }}</td>
           <td>{{ book.publication }}</td>
           <td>{{ book.user }}</td>
+          <td><button @click="lend(book)">Ausleihen</button></td>
         </tr>
       </tbody>
     </table>
@@ -62,6 +64,16 @@
       },
 
       methods: {
+        lend: function (book) {
+            var xhr = new XMLHttpRequest()
+            var self = this
+            xhr.open('GET', book._links.self.href + "/lend?user=test123")
+            xhr.onload = function () {
+                self.fetchData();
+            }
+            xhr.send()
+        },
+
         fetchData: function () {
           var xhr = new XMLHttpRequest()
           var self = this
