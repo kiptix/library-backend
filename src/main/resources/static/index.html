@@ -1,131 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Bibliotheksverwaltung</title>
 
-    <link href="bootstrap4/css/bootstrap.min.css" rel="stylesheet">
-
+  <link href="bootstrap4/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
-<script src="jquery/jquery-3.2.1.min.js"></script>
-<script src="bootstrap4/js/bootstrap.min.js"></script>
-<div id="lib" class="container">
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.3.1/vue-resource.min.js"></script>
+
+  <div id="lib" class="container">
     <div v-if="loggedInUserName">
-        <h2>Bibliotheksverwaltung</h2>
-        <p>Tabelle zur Verwaltung der ausgeliehenen Bücher</p>
-        <table class="table table-hover table-striped">
-            <thead>
-            <tr>
-                <th>Nr.</th>
-                <th>Title</th>
-                <th>Autor</th>
-                <th>Verlag</th>
-                <th>ISBN</th>
-                <th>Erscheinungsdatum</th>
-                <th>Verliehen</th>
-                <th>Ausleihen</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!--<bookrow v-for="item in books" v-bind:book="item"></bookrow>-->
-            <tr v-for="(book, index) in books">
-                <td>{{ index + 1 }}</td>
-                <td>{{ book.title }}</td>
-                <td>{{ book.author }}</td>
-                <td>{{ book.publisher }}</td>
-                <td>{{ book.isbn }}</td>
-                <td>{{ book.publication }}</td>
-                <td>{{ book.user }}<span class="glyphicon glyphicon-envelope"></span></td>
-                <!--  <td><button class="btn btn-info" v-bind:class="{ disabled: book.user }" @click="lend(book)">Ausleihen</button></td>-->
-                <td>
-                    <button class="btn btn-info" v-if="book.user" @click="unLend(book)">Ausleihe entfernen</button>
-                    <button class="btn btn-info" v-else @click="lend(book)">Ausleihen</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+      <h2>Bibliotheksverwaltung</h2>
+      <p>Tabelle zur Verwaltung der ausgeliehenen Bücher</p>
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Nr.</th>
+            <th>Title</th>
+            <th>Autor</th>
+            <th>Verlag</th>
+            <th>ISBN</th>
+            <th>Erscheinungsdatum</th>
+            <th>Verliehen</th>
+            <th>Ausleihen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--<bookrow v-for="item in books" v-bind:book="item"></bookrow>-->
+          <tr v-for="(book, index) in books">
+            <td>{{ index + 1 }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.publisher }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.publication }}</td>
+            <td>{{ book.user }}</td>
+            <td>
+              <button class="btn btn-info" v-if="canBorrow(book)" @click="borrow(book)">ausleihen</button>
+              <button class="btn btn-warning" v-else-if="canReturn(book)" @click="returnBook(book)">zurück</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div v-else>
 
-        <div class="col-md-offset-5 col-md-3">
+      <div class="col-md-offset-5 col-md-3">
 
-            <div class="form-login">
-                <h4>Welcome back.</h4>
-                <input id="userName" v-model="username" class="form-control input-sm chat-input"
-                       placeholder="username" type="text">
-                <br>
-                <input id="userPassword" class="form-control input-sm chat-input" placeholder="password"
-                       type="text">
-                <br>
-                <div class="wrapper">
+        <div class="form-login">
+          <h4>Welcome back.</h4>
+          <input id="userName" v-model="username" class="form-control input-sm chat-input"
+                 placeholder="username" type="text">
+          <br>
+          <input id="userPassword" class="form-control input-sm chat-input" placeholder="password"
+                 type="text">
+          <br>
+          <div class="wrapper">
             <span class="group-btn">
                  <button class="btn btn-default" @click="login">Login</button>
             </span>
-                </div>
-
-            </div>
+          </div>
 
         </div>
 
+      </div>
+
     </div>
-</div>
-<script>
+  </div>
+
+  <script>
     var apiURL = 'http://localhost:8080/books'
 
-    Vue.component('bookrow', {
-        props: ['book'],
-        template: '<tr><td>{{ book.title }}</td><td>{{ book.author }}</td></tr>'
-    })
+    //    Vue.component('bookrow', {
+    //      props: ['book'],
+    //      template: '<tr><td>{{ book.title }}</td><td>{{ book.author }}</td></tr>'
+    //    })
 
     var lib = new Vue({
 
-        el: '#lib',
-        data: {
-            books: null,
-            username: null,
-            loggedInUserName:null
+      el: '#lib',
+      data: {
+        books: null,
+        username: null,
+        loggedInUserName: null
+      },
+
+      created: function () {
+        this.fetchData()
+      },
+
+      methods: {
+
+        login: function () {
+          this.loggedInUserName = this.username;
         },
 
-        created: function () {
-            this.fetchData()
+        fetchData: function () {
+          var self = this
+
+          this.$http.get(apiURL)
+              .then(function (response) {
+                self.books = response.body._embedded.books
+              }, function (response) {
+                alert("error")
+              });
         },
 
-        methods: {
-            lend: function (book) {
-                var xhr = new XMLHttpRequest()
-                var self = this
-                xhr.open('GET', book._links.self.href + "/lend?user="+self.loggedInUserName)
-                xhr.onload = function () {
+        borrow: function (book) {
+          var self = this;
+          this.$http.post(book._links.borrow.href, self.loggedInUserName)
+              .then(function (response) {
                     self.fetchData();
-                }
-                xhr.send()
-            },
+                  }, function (response) {
+                    alert("error")
+                  }
+              );
+        },
 
-            unLend: function (book) {
-                var xhr = new XMLHttpRequest()
-                var self = this
-                xhr.open('GET', book._links.self.href + "/lend?user= ")
-                xhr.onload = function () {
+        returnBook: function (book) {
+          var self = this;
+          this.$http.post(book._links.return.href, {})
+              .then(function (response) {
                     self.fetchData();
-                }
-                xhr.send()
-            },
+                  }, function (response) {
+                    alert("error")
+                  }
+              );
+        },
 
-            login: function () {
-                this.loggedInUserName = this.username;
-            },
+        canBorrow: function (book) {
+          return book._links.hasOwnProperty('borrow');
+        },
 
-            fetchData: function () {
-                var self = this
-                $.getJSON(apiURL, function(result){
-                    self.books = result._embedded.books
-                });
-            }
+        canReturn: function (book) {
+          return book._links.hasOwnProperty('return');
         }
+
+      }
     })
-</script>
+  </script>
 
 </body>
 </html>
