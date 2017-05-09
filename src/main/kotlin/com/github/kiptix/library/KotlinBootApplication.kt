@@ -1,4 +1,4 @@
-package de.btc.library
+package com.github.kiptix.library
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

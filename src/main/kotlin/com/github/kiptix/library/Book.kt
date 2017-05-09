@@ -1,4 +1,4 @@
-package de.btc.library
+package com.github.kiptix.library
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
